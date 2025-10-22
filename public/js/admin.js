@@ -2,7 +2,7 @@ $(document).ready(function() {
     // Function to display dynamic messages
     function displayMessage(message, type) {
         // Remove any existing alerts to prevent multiple messages stacking up
-        $('#messageContainer .alert').remove(); 
+        $('#messageContainer .alert').remove();
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
                 ${message}
@@ -10,22 +10,26 @@ $(document).ready(function() {
             </div>
         `;
         // Append to a specific container, not just any .card-body
-        $('#messageContainer').html(alertHtml); 
-        
+        $('#messageContainer').html(alertHtml);
+
         // Auto-dismiss after 5 seconds
         setTimeout(function() {
             $('#messageContainer .alert').alert('close');
         }, 5000);
     }
-    // --- Moods Management  ---
+
+    // --- Moods Management ---
     $('#addMoodModal form').on('submit', function(e) {
         e.preventDefault();
         const formData = $(this).serialize();
+        const csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get Laravel CSRF token
         $.ajax({
-            url: '../api/moods.php',
+            url: '/api/moods', // Corrected API endpoint to Laravel URL
             type: 'POST',
-            data: formData + '&action=add_mood',
-            dataType: 'json',
+            data: formData, // Removed redundant '&action=add_mood'
+            headers: {
+                'X-CSRF-TOKEN': csrfToken // Send CSRF token
+            },
             success: function(response) {
                 if (response.success) {
                     displayMessage(response.message, 'success');
@@ -46,10 +50,11 @@ $(document).ready(function() {
                                         data-description="${response.mood.description}">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <form method="POST" class="d-inline delete-mood-form">
+                                <form class="d-inline delete-mood-form">
+                                    @csrf
+                                    @method('DELETE') {{-- Use DELETE method for RESTful API --}}
                                     <input type="hidden" name="mood_id" value="${response.mood.mood_id}">
-                                    <button type="submit" name="delete_mood" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('Are you sure you want to delete this mood?')">
+                                    <button type="submit" name="delete_mood" class="btn btn-sm btn-outline-danger">
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </form>
@@ -87,11 +92,14 @@ $(document).ready(function() {
     $('#editMoodModal form').on('submit', function(e) {
         e.preventDefault();
         const formData = $(this).serialize();
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: '../api/moods.php',
-            type: 'POST',
-            data: formData + '&action=update_mood',
-            dataType: 'json',
+            url: '/api/moods/' + $('#edit_mood_id').val(), // Corrected to PUT request with ID
+            type: 'PUT',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
             success: function(response) {
                 if (response.success) {
                     displayMessage(response.message, 'success');
@@ -120,13 +128,15 @@ $(document).ready(function() {
     $(document).on('submit', '.delete-mood-form', function(e) {
         e.preventDefault();
         if (confirm('Are you sure you want to delete this mood?')) {
-            const formData = $(this).serialize();
+            const moodId = $(this).find('input[name="mood_id"]').val();
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
             const row = $(this).closest('tr');
             $.ajax({
-                url: '../api/moods.php',
-                type: 'POST',
-                data: formData + '&action=delete_mood',
-                dataType: 'json',
+                url: '/api/moods/' + moodId, // Corrected to DELETE request with ID
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
                 success: function(response) {
                     if (response.success) {
                         displayMessage(response.message, 'success');
@@ -146,18 +156,21 @@ $(document).ready(function() {
     $('#addMovieModal form').on('submit', function(e) {
         e.preventDefault();
         const formData = $(this).serialize();
-        
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
         $.ajax({
-            url: '/api/movies', 
+            url: '/api/movies',
             type: 'POST',
-            data: formData + '&action=add_movie',
-            dataType: 'json',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
             success: function(response) {
                 if (response.success) {
                     displayMessage(response.message, 'success');
                     $('#addMovieModal').modal('hide');
                     $('#addMovieModal form')[0].reset();
-                    
+
                     // Refresh the page to show the new movie
                     location.reload();
                 } else {
@@ -189,17 +202,20 @@ $(document).ready(function() {
     $('#editMovieModal form').on('submit', function(e) {
         e.preventDefault();
         const formData = $(this).serialize();
-        
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
         $.ajax({
-            url: API_BASE_URL + 'movies.php', 
-            type: 'POST',
-            data: formData + '&action=update_movie',
-            dataType: 'json',
+            url: '/api/movies/' + $('#edit_movie_id').val(), // Corrected to PUT request with ID
+            type: 'PUT',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
             success: function(response) {
                 if (response.success) {
                     displayMessage(response.message, 'success');
                     $('#editMovieModal').modal('hide');
-                    
+
                     // Refresh the page to show updated data
                     location.reload();
                 } else {
@@ -215,16 +231,18 @@ $(document).ready(function() {
 
     $(document).on('submit', '.delete-movie-form', function(e) {
         e.preventDefault();
-        
+
         if (confirm('Are you sure you want to delete this movie?')) {
-            const formData = $(this).serialize();
+            const movieId = $(this).find('input[name="movie_id"]').val();
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
             const row = $(this).closest('tr');
-            
+
             $.ajax({
-                url: API_BASE_URL + 'movies.php', 
-                type: 'POST',
-                data: formData + '&action=delete_movie',
-                dataType: 'json',
+                url: '/api/movies/' + movieId, // Corrected to DELETE request with ID
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
                 success: function(response) {
                     if (response.success) {
                         displayMessage(response.message, 'success');
