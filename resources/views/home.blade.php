@@ -158,8 +158,8 @@ section h2 {
                 <div class="icon-circle mb-3 rounded-circle mx-auto text-white">
                     <i class="fas fa-sign-in-alt fs-4"></i>
                 </div>
-                <h5>1. Free Access Anytime</h5>
-                <p class="">Access personalized movie recommendations without logging in.</p>
+                <h5>1. Access Anytime</h5>
+                <p class="">Access personalized movie recommendations.</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -200,7 +200,7 @@ section h2 {
             <div class="card bg-dark text-light movie-card h-100 border-0">
                 @php
                     $posterImage = getYouTubeThumbnail($movie->trailer_url) ?? asset($movie->poster_path);
-                    $fallbackImage = asset('images/shawshank.jpg');
+                    $fallbackImage = asset('/assets/images/shawshank.jpg');
                 @endphp
                 <img src="{{ $posterImage }}" alt="{{ $movie->title }}" onerror="this.onerror=null; this.src='{{ $fallbackImage }}';">
                 <div class="card-body">

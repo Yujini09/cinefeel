@@ -37,6 +37,12 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.reviews.index') }}">
+                            <i class="fas fa-star me-2"></i> Manage Reviews
+                        </a>
+                    </li>
+
                     <li class="nav-item mt-3 border-top pt-2">
                         <a class="nav-link text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout
@@ -260,7 +266,7 @@
 
                 {{-- Movies Table --}}
                 <div class="card shadow-lg border-0" id="movieList">
-                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="fas fa-list me-2"></i> All Movie Entries</h5>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -277,10 +283,10 @@
                     <div class="card-body p-0 table-scroll-wrapper">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover align-middle mb-0" id="movieTable">
-                                <thead class="table-dark sticky-header">
+                                <thead class="table-secondary sticky-header">
                                     <tr>
-                                        <th style="width: 5%;"><i class="fas fa-hashtag"></i> ID</th>
-                                        <th style="width: 35%;"><i class="fas fa-heading"></i> Title</th>
+                                        <th style="width: 5%;"><i class=""></i> ID</th>
+                                        <th style="width: 35%;"><i class=""></i> Title</th>
                                         <th style="width: 20%;"><i class="fas fa-smile"></i> Mood</th>
                                         <th style="width: 15%;"><i class="fas fa-calendar-alt"></i> Year</th>
                                         <th style="width: 25%;"><i class="fas fa-cogs"></i> Actions</th>

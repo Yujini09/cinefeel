@@ -78,15 +78,15 @@
 
             {{-- Reviews Table --}}
             <div class="card shadow-lg border-0" id="reviewList">
-                <div class="card-header bg-secondary text-white">
+                <div class="card-header bg-dark text-white">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i> All Review Entries</h5>
                 </div>
                 <div class="card-body p-0 table-scroll-wrapper">
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle mb-0" id="reviewTable">
-                            <thead class="table-dark sticky-header">
+                            <thead class="table-secondary sticky-header">
                                 <tr>
-                                    <th style="width: 5%;"><i class="fas fa-hashtag"></i> ID</th>
+                                    <th style="width: 5%;"><i class=""></i> ID</th>
                                     <th style="width: 20%;"><i class="fas fa-user"></i> Reviewer Name</th>
                                     <th style="width: 10%;"><i class="fas fa-star"></i> Rating</th>
                                     <th style="width: 40%;"><i class="fas fa-comment"></i> Review Text</th>
